@@ -1,7 +1,6 @@
 package historykey
 
 import (
-	"API/Database"
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
@@ -10,9 +9,7 @@ import (
 var HistoryDB *sql.DB
 
 func GetHistory(c *gin.Context) {
-	HistoryDB, _ = Database.GetDB()
 	codekey := c.DefaultQuery("codeKey", "")
-
 	rowHistory := c.DefaultQuery("row", "")
 	query := "select date , time ,report from history where mykey_codekey = ? order by idhistory desc limit ?"
 	row, err := HistoryDB.Query(query, codekey, rowHistory)
@@ -39,5 +36,5 @@ func GetHistory(c *gin.Context) {
 		dataHistory = append(dataHistory, rowData)
 	}
 	c.JSON(200, gin.H{"data": dataHistory})
-	HistoryDB.Close()
+	row.Close()
 }
