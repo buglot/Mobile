@@ -24,7 +24,10 @@ func main() {
 	HostMangerkey.HostMangerDb = Db
 	historykey.HistoryDB = Db
 	historykey.ReportDB = Db
+<<<<<<< HEAD
 	esp.ESPDB = Db
+=======
+>>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
 	if err != nil {
 		fmt.Println("Error Database Connection!")
 	}

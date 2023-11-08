@@ -23,7 +23,10 @@ func ESPCheckServo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, state)
+<<<<<<< HEAD
 	println(state)
+=======
+>>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
 	row.Close()
 }
 func ESPOpenCloseServo(c *gin.Context) {
@@ -48,7 +51,10 @@ func ESPOpenCloseServo(c *gin.Context) {
 	}
 	historykey.ReportSend(codekey, "Card tap for close")
 	c.JSON(200, "close")
+<<<<<<< HEAD
 	fmt.Println(typedo)
+=======
+>>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
 	row.Close()
 }
 
