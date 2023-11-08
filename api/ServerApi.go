@@ -24,10 +24,7 @@ func main() {
 	HostMangerkey.HostMangerDb = Db
 	historykey.HistoryDB = Db
 	historykey.ReportDB = Db
-<<<<<<< HEAD
 	esp.ESPDB = Db
-=======
->>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
 	if err != nil {
 		fmt.Println("Error Database Connection!")
 	}
@@ -49,6 +46,7 @@ func main() {
 	r.POST("/espPIR", esp.ESPPIR)
 	r.GET("/espCheck", esp.ESPCheckServo)
 	r.GET("/openclose", openclose)
+	r.GET("/notifi", historykey.GetHistoryWithAccount)
 	r.Run(":" + configs.PortAPI)
 
 }
