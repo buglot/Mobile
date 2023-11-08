@@ -17,9 +17,11 @@ export default function OnlyHost() {
                 if (user !== null) {
                     const response = await fetch(url_myAPI + "info?user=" + user);
                     const data = await response.json();
-                    setKey(data.HostKey);
-                    console.log(data);
                     setAccounts(data);
+                    if (data.HostKey) {
+                        setKey(data.HostKey);
+                    }
+                    console.log(data);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -27,19 +29,7 @@ export default function OnlyHost() {
         };
 
         fetchUserData();
-    }, [setKey, setAccounts])
-
-    useEffect(() => {
-        fetch(url_myAPI + "whoJoinKey?codeKey=123")
-            .then((response) => response.json())
-            .then((data) => {
-                setWho(data.data);
-                console.log(data.data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }, [setWho]);
+    }, [setKey, setAccounts]);
 
     if (account.isHost === false) {
         return (
@@ -52,38 +42,39 @@ export default function OnlyHost() {
             </View>
         );
     }
-
-    return (
-        <View style={styles.container}>
+    else {
+        return (
             <ScrollView style={styles.onlyhostBody}>
-                <View style={styles.onlyhostHeader}>
-                    <Text style={styles.headerText}>Host Manager</Text>
+                <View style={styles.container}>
+                    <View>
+                        <Text style={styles.headerText}>Host Manager</Text>
+                    </View>
+                    <View>
+                        <Text style={styles.headerText}>Key Manager</Text>
+                    </View>
+                    {Object.values(key).map((item, index) => (
+                        <ShareKeyItems data={item} who={who} key={index} />
+                    ))}
                 </View>
-                <View style={styles.onlyhostHeader}>
-                    <Text style={styles.headerText}>Key Manager</Text>
-                </View>
-                {Object.values(key).map((item, index) => (
-                    <ShareKeyItems data={item} who={who} key={index} />
-                ))}
-            </ScrollView>
-        </View>
-    );
+            </ScrollView >
+        );
+    }
+
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#4b4b4b',
+        paddingTop: 50,
+        height: '100%',
     },
     onlyhostBody: {
         flex: 1,
+        width: "100%",
         backgroundColor: '#023047',
-        padding: 16,
     },
     centered: {
-        flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
+        top:'37%'
     },
     errorMessage: {
         fontSize: 30,

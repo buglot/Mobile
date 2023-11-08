@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { url_myAPI } from '../../configs';
 import { TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 export default function RegisterForm(props) {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -9,15 +10,38 @@ export default function RegisterForm(props) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const navigation = useNavigation();
+
+    const isValidEmail = (value) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+    };
+
+
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
 
     const register = () => {
+
         const formData = new URLSearchParams();
         formData.append("email", email);
 
-        if (password === confirmPassword) {
+        if (!email || !password || !confirmPassword) {
+            alert("Please fill in all fields");
+            return;
+        }
+        else if (!isValidEmail(email)) {
+            alert('Please enter a valid email');
+            return;
+        }
+        
+        else if (!password || !confirmPassword) {
+            alert("Please enter a password and confirm it");
+            return;
+        }
+
+        else if (password === confirmPassword) {
             formData.append("password", password);
             fetch(`${url_myAPI}register`, {
                 method: "POST",
@@ -32,7 +56,7 @@ export default function RegisterForm(props) {
                         alert(data.error);
                     } else {
                         alert("register successfully");
-                        props.history.push('/login');
+                        navigation.navigate('Login'); // นำไปยังหน้า "Login"
                     }
                 });
         } else {

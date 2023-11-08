@@ -24,9 +24,8 @@ export default function SharedMemberItem(prop) {
                 return response.json();
             })
             .then((data) => {
-                navigation.navigate("OnlyHost")
                 alert("We transfer host to new one!");
-                // Instead of window.location.reload(), you can use a React Native navigation library to navigate to a different screen.
+                prop.reloadpage() // Instead of window.location.reload(), you can use a React Native navigation library to navigate to a different screen.
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -44,53 +43,31 @@ export default function SharedMemberItem(prop) {
             },
             body: formData.toString()
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                const deleteMember = () => {
-        const formData = new URLSearchParams();
-        formData.append("idaccountskey", prop.data1.idaccountskey);
-
-        fetch(url_myAPI + "Kick", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: formData.toString()
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                navigation.navigate()
+            .then(re => re.json())
+            .then(data => {
                 alert("Delete this member!");
-                
+                prop.reloadpage()
                 // Instead of window.location.reload(), you can use a React Native navigation library to navigate to a different screen.
             })
             .catch((error) => {
                 console.error('Error:', error);
-            });
-    };
-                alert("Delete this member!");
-                
-                // Instead of window.location.reload(), you can use a React Native navigation library to navigate to a different screen.
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
     };
 
-    return (
-        <View style={styles.memberItem}>
+return (
+    <View style={styles.memberItem}>
+        <View style={{ flex: 1 / 2 }}>
             <Text style={styles.memberNickname}>{prop.data1.idaccountskey.slice(0, 9)}...</Text>
             <Text style={styles.memberNickname}>{prop.data1.email}</Text>
+        </View>
+
+        <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            gap: '50%'
+        }}>
             <TouchableOpacity onPress={giveHost} style={styles.memberButton}>
                 <Text style={styles.buttonText}>Give Host!</Text>
             </TouchableOpacity>
@@ -98,29 +75,27 @@ export default function SharedMemberItem(prop) {
                 <Text style={styles.buttonText}>Delete Member!</Text>
             </TouchableOpacity>
         </View>
-    );
+    </View>
+);
 }
 
 const styles = StyleSheet.create({
     memberItem: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 8,
-        marginVertical: 16,
+        padding: 1,
         backgroundColor: '#2541b2',
     },
     memberNickname: {
         backgroundColor: '#8ecae6',
-        borderWidth: 2,
         borderColor: '#1A1A1A',
         color: '#000',
-        fontFamily: 'Roobert',
         fontSize: 16,
         fontWeight: '600',
         padding: 8,
         textAlign: 'center',
-        width: '20%',
+        width: '100%',
+        borderWidth: 1
     },
     memberButton: {
         backgroundColor: '#000000',

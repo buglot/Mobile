@@ -1,7 +1,6 @@
 package esp
 
 import (
-	"API/Database"
 	"API/historykey"
 	"database/sql"
 	"fmt"
@@ -12,11 +11,11 @@ import (
 var ESPDB *sql.DB
 
 func ESPCheckServo(c *gin.Context) {
-	ESPDB, _ = Database.GetDB()
 	codekey := c.DefaultQuery("codeKey", "")
 	query := "select keystatus from mystate where mykey_codeKey = ?"
-	row := ESPDB.QueryRow(query, codekey)
+	row, _ := ESPDB.Query(query, codekey)
 	var state int
+	row.Next()
 	err := row.Scan(&state)
 	if err != nil {
 		c.JSON(500, err.Error())
@@ -24,10 +23,10 @@ func ESPCheckServo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, state)
-	ESPDB.Close()
+	println(state)
+	row.Close()
 }
 func ESPOpenCloseServo(c *gin.Context) {
-	ESPDB, _ = Database.GetDB()
 	codekey := c.PostForm("codeKey")
 	typedo := c.PostForm("type")
 	var tpyePInt int
@@ -37,7 +36,7 @@ func ESPOpenCloseServo(c *gin.Context) {
 	}
 	query := "UPDATE mystate SET keystatus = ? WHERE (mykey_codeKey = ?)"
 
-	row := ESPDB.QueryRow(query, tpyePInt, codekey)
+	row, _ := ESPDB.Query(query, tpyePInt, codekey)
 	if row.Err() != nil {
 		c.JSON(500, "cant UPDATE database!!")
 		return
@@ -46,24 +45,22 @@ func ESPOpenCloseServo(c *gin.Context) {
 		historykey.ReportSend(codekey, "Card tap for Open")
 		c.JSON(200, "open")
 		return
-	} else {
-		historykey.ReportSend(codekey, "Card tap for close")
-		c.JSON(200, "close")
-		return
 	}
-	ESPDB.Close()
+	historykey.ReportSend(codekey, "Card tap for close")
+	c.JSON(200, "close")
+	fmt.Println(typedo)
+	row.Close()
 }
 
 func ESPPIR(c *gin.Context) {
-	ESPDB, _ = Database.GetDB()
 	codekey := c.PostForm("codeKey")
 	value := c.PostForm("value")
 	query := "UPDATE mystate SET nowCloserDoor = ? WHERE (mykey_codeKey = ?)"
-	row := ESPDB.QueryRow(query, value, codekey)
+	row, _ := ESPDB.Query(query, value, codekey)
 	if row.Err() != nil {
 		c.JSON(500, row.Err().Error())
 		return
 	}
 	c.JSON(200, "susess")
-	ESPDB.Close()
+	row.Close()
 }

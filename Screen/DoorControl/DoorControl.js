@@ -4,9 +4,9 @@ import { Button } from 'react-native-paper'
 import { url_myAPI } from '../../configs'
 import DoorItem from './DoorItem'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { useFocusEffect } from '@react-navigation/native';
 const DoorControl = () => {
-    const [key, setKey] = useState({});
+    const [keylist, setKey] = useState({});
     const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
@@ -15,7 +15,6 @@ const DoorControl = () => {
                 fetch(`${url_myAPI}info?user=${user}`)
                 .then((response) => response.json())
                 .then((data) => {
-
                     setKey(data.key);
                 })
                 .catch((error) => {
@@ -26,13 +25,12 @@ const DoorControl = () => {
                     fetch(`${url_myAPI}info?user=${user}`)
                         .then((response) => response.json())
                         .then((data) => {
-
                             setKey(data.key);
                         })
                         .catch((error) => {
                             console.error('Error:', error);
                         });
-                }, 5000);
+                },300);
                 return () => clearInterval(intervalId);
             })
             .catch(error => {
@@ -54,9 +52,9 @@ const DoorControl = () => {
                     </Text>
                     <View style={styles.objdoor}>
                         {
-                            Object.keys(key).map((keyId, index) => (
-                                <DoorItem codekey={key[keyId].codeKey} nickname={key[keyId].nickname} keyState={key[keyId].statekey} emailH=
-                                    {key[keyId].emailHOST} isHost={key[keyId].isHost} />
+                            Object.keys(keylist).map((keyId, index) => (
+                                <DoorItem key={keyId} codekey={keylist[keyId].codeKey} nickname={keylist[keyId].nickname} keyState={keylist[keyId].statekey} emailH=
+                                    {keylist[keyId].emailHOST} isHost={keylist[keyId].isHost} />
                             ))
                         }
                     </View>
@@ -73,13 +71,13 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#0a1128",
         height:'100%',
+        paddingTop:80
     },
     doorBody: {
-
     },
     digitalClock: {
         fontWeight: 'bold',
-        fontSize: 50,
+        fontSize: 65,
         alignSelf: 'center',
         color:'#fefcfb'
     },

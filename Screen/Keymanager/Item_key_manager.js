@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { TextInput, Button, DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
 import ChangeName from './ChangeName';
 import { url_myAPI } from '../../configs';
+import { useNavigation } from '@react-navigation/native';
 
 const Item_key_manager = (props) => {
     var codeKey = props.keyData["codeKey"];
@@ -13,6 +14,8 @@ const Item_key_manager = (props) => {
     let idAccountKey = props.keyData["id"];
     const [buttonChoose, setButtonChoose] = useState(0);
     const [errorMessage, setErrorMessage] = useState("");
+
+    const navigation = useNavigation();
 
     if (!hostKey) {
         codeKey = "(host) " + codeKey;
@@ -33,7 +36,7 @@ const Item_key_manager = (props) => {
                     },
                     {
                         text: "Disconnect",
-                        onPress: () => disconnectKey(idAccountKey)
+                        onPress: () => {disconnectKey(idAccountKey);props.reload()}
                     }
                 ]
             );
@@ -50,8 +53,9 @@ const Item_key_manager = (props) => {
     const disconnectKey = (idAccountKey) => {
         const formData = new FormData();
         formData.append('idaccountkey', idAccountKey);
+        
 
-        fetch(`${url_myAPI}/disconnectkey`, {
+        fetch(`${url_myAPI}disconnectkey`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,12 +67,16 @@ const Item_key_manager = (props) => {
                 Alert.alert("Disconnect Key", data.data, [
                     {
                         text: 'OK',
-                        onPress: () => window.location.reload()
+                        
                     }
                 ]);
             })
-            .catch(error => Alert.alert("Error", "Server is Error. Sorry."));
+
     };
+
+    const handleManage = () =>{
+        navigation.navigate('OnlyHost')
+    }
 
     return (
         <View style={styles.container}>
@@ -81,7 +89,7 @@ const Item_key_manager = (props) => {
             </View>
 
             <View style={styles.sizeBut}>
-                <Button style={styles.buttonChoose} textColor='white' onPress={() => setButtonChoose(1)} >
+                <Button style={styles.buttonChoose} textColor='white' icon={"rename-box"} onPress={() => setButtonChoose(1)} >
                     ChangeName
                 </Button>
                 {hostKey === true && (
@@ -90,22 +98,17 @@ const Item_key_manager = (props) => {
                         onPress={() => {
                             setButtonChoose(2);
                             setErrorMessage("");
-                            // You can implement navigation to the manager screen here
+                            handleManage();
                         }}
+                        icon={'hammer-screwdriver'}
                     >Manage</Button>
                 )}
 
-
-                <Button style={styles.disconectbtn} onPress={handleDisconnect} >Disconnect</Button>
+                <Button style={styles.disconectbtn} onPress={handleDisconnect} icon={"lan-disconnect"}>Disconnect</Button>
             </View>
 
-
-
-
-
-
             {errorMessage && <Text>{errorMessage}</Text>}
-            {buttonChoose === 1 && <ChangeName set={setButtonChoose} idaccountkey={idAccountKey} />}
+            {buttonChoose === 1 && <ChangeName set={setButtonChoose} idaccountkey={idAccountKey} reload={props.reload}/>}
         </View>
     );
 };
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     },
     texttilte: {
         fontWeight: "bold",
-        fontSize: "20",
+        fontSize: 20,
         color: '#fff',
         alignSelf: 'center',
     },
@@ -145,7 +148,8 @@ const styles = StyleSheet.create({
     sizeBut: {
         width: '40%',
         alignSelf: 'center',
-        gap:5
+        gap: 5,
+        justifyContent: 'center'
     },
     emailhost: {
     },

@@ -9,8 +9,7 @@ export default function ShareKeyItems(prop) {
     const codeKey = prop.data.codeKey;
     const shareKey = prop.data.shareKey;
     const [who, setWho] = useState({});
-
-    useEffect(() => {
+    const loadData = ()=>{
         fetch(url_myAPI + "whoJoinKey?codeKey=" + codeKey)
             .then((response) => response.json())
             .then((data) => {
@@ -20,17 +19,22 @@ export default function ShareKeyItems(prop) {
             .catch((error) => {
                 console.error('Error:', error);
             });
-    }, [codeKey]);
-
+    }
+    useEffect(() => {
+        loadData()
+    }, []);
+    const reloadpage=()=>{
+        loadData();
+    }
     return (
         <View>
             <View style={styles.sharekeyContainer}>
-                <Text>codeKey {codeKey}</Text>
+                <Text >codeKey {codeKey}</Text>
                 <Text>nickname {nickname === "" ? "ไม่มี" : nickname}</Text>
                 <KeyGenerate codeKeysend={codeKey} shareKeySend={shareKey} />
             </View>
             {Object.values(who).map((item, index) => (
-                <SharedMemberItem data1={item} sendCodeKey={codeKey} key={index} />
+                <SharedMemberItem data1={item} sendCodeKey={codeKey} key={index} reloadpage={reloadpage}/>
             ))}
         </View>
     );
@@ -44,5 +48,8 @@ const styles = StyleSheet.create({
         padding: 8,
         marginVertical: 16,
         backgroundColor: '#219ebc',
+        width:'95%',
+        alignSelf:'center',
+        borderRadius:20
     },
 });

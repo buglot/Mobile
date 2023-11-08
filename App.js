@@ -1,15 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './Screen/Login/Login';
-import DoorControl from './Screen/DoorControl/DoorControl';
 import AuthStack from './Screen/Navigation.js/AuthStack';
-import AppStack from './Screen/Navigation.js/AppStack';
-
 const Stack = createNativeStackNavigator();
-
 export default function App() {
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

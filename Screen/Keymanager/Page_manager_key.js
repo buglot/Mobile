@@ -9,19 +9,25 @@ const PageMangerKey = () => {
     const [user, setUser] = useState("");
     const [infoAccount, setInfoAccount] = useState(null);
 
-    useEffect(() => {
+    const loadInfoAccount = () => {
         AsyncStorage.getItem('username').then(storedUser => {
-            if (storedUser) {
-                setUser(storedUser);
-                fetch(url_myAPI + "info?user=" + storedUser)
+                fetch(`${url_myAPI}info?user=${storedUser}`)
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data.key)
                         setInfoAccount(data);
                     })
-                    .catch(error => console.error(error));
-            }
+                    .catch(error => console.error("qwewq"+error));
         });
-    }, [setInfoAccount]);
+    }
+
+    useEffect(() => {
+        loadInfoAccount();
+    }, []); // ใช้ค่าว่าง `[]` เพื่อให้ `useEffect` ทำงานครั้งเดียวเมื่อหน้าถูกโหลดครั้งแรก
+
+    const reloadPage = () => {
+        loadInfoAccount();
+    };
     if (infoAccount === null) {
         return (
             <View>
@@ -37,15 +43,14 @@ const PageMangerKey = () => {
     }
     return (
         <View style={styles.container}>
-            <ItemAddKey />
+            <ItemAddKey reload ={reloadPage}/>
             <ScrollView>
                 <View style={styles.conin}>
-                    {infoAccount.keyconnect !== false && Object.keys(infoAccount.HostKey).map((keyId, index) => (
-                        <Item_key_manager key={index} keyData={infoAccount.key[keyId]} />
+                    {infoAccount.keyconnect !== false && Object.keys(infoAccount.key).map((keyId, index) => (
+                        <Item_key_manager key={index} keyData={infoAccount.key[keyId]} reload ={reloadPage} />
                     ))}
                 </View>
             </ScrollView>
-
         </View>
     );
 };
@@ -56,7 +61,8 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#0a1128',
         flex: 1,
-        gap: 30
+        gap: 30,
+        paddingTop:40
     },
     conin: {
         padding: 10,

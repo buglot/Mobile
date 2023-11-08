@@ -5,7 +5,7 @@ import { url_myAPI } from '../../configs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-const ItemAddKey = () => {
+const ItemAddKey = (props) => {
     const navigation = useNavigation();
     const [errorMessage, setErrorMessage] = useState("");
     const [keyConnect, setKeyConnect] = useState("");
@@ -30,13 +30,13 @@ const ItemAddKey = () => {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    navigation.navigate("Doorcontrol")
+                    props.reload();
                 } else {
                     setErrorMessage(data.error);
                 }
             })
             .catch(error => {
-                setErrorMessage("Server is Error Sorry.");
+                setErrorMessage("Server is Error Sorry."+error);
             });
     };
 

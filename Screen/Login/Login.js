@@ -71,9 +71,9 @@ const Login = () => {
                     label="Password"
                     value={password}
                     mode='outlined'
-
                     activeOutlineColor='#034078'
                     outlineColor='#fff'
+                    secureTextEntry={true}
                     onChangeText={text => setPassword(text)}
                 />
             </View>

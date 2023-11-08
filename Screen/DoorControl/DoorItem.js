@@ -23,13 +23,12 @@ const DoorItem = (props) => {
         }
         try {
             const email = await AsyncStorage.getItem('email');
-            console.log(email)
+
             const response = await fetch(
                 `${url_myAPI}openclose?codeKey=${a}&state=${state}&who=${email}`
             );
             const data = await response.json();
             setIsLoading(false);
-            console.log(email)
         } catch (error) {
             console.error(error);
         }

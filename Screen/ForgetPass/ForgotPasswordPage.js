@@ -2,13 +2,17 @@ import React from 'react';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { url_myAPI } from '../../configs';
+import { useNavigation } from '@react-navigation/native';
+
 const ForgotPasswordPage = () => {
+    const navigation = useNavigation();
     const handleForgotPassword = async ({ email, newPassword }) => {
 
         const formData = new FormData();
         formData.append('email', email);
         formData.append('password', newPassword);
         console.log(newPassword)
+
         const response = await fetch(url_myAPI + "forgetpass", {
             method: 'POST',
             headers: {
@@ -20,6 +24,7 @@ const ForgotPasswordPage = () => {
 
         if (data.data) {
             Alert.alert('Success', data.data, [{ text: 'OK', onPress: () => navigateToLogin() }]);
+            
         } else {
             Alert.alert('Error', data.error);
         }
@@ -27,7 +32,7 @@ const ForgotPasswordPage = () => {
     };
 
     const navigateToLogin = () => {
-        // Implement navigation to login screen for React Native
+        navigation.navigate('Login')
     };
 
     return (
