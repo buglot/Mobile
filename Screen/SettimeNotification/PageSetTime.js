@@ -13,10 +13,7 @@ export default function PageSetTime() {
     const [Lasttimeset, setLastTime] = useState("23:59")
     const [DataListTimeSet, setDataListTimeSet] = useState(null)
     const [ONedit, setONedit] = useState(false)
-<<<<<<< HEAD
     
-=======
->>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
     const ShowSettime = () => {
         return (<DateTimePicker
             value={date}
@@ -55,7 +52,6 @@ export default function PageSetTime() {
     const deleteItemAtIndex = async (indexToDelete) => {
         const updatedDataList = DataListTimeSet.filter((item, index) => index !== indexToDelete);
         setDataListTimeSet(updatedDataList);
-<<<<<<< HEAD
         if (updatedDataList.length === 0) {
             await AsyncStorage.removeItem('Notification')
             setDataListTimeSet(null);
@@ -65,18 +61,6 @@ export default function PageSetTime() {
 
     };
     useEffect(() => {
-=======
-        if(updatedDataList.length === 0){
-            await AsyncStorage.removeItem('Notification')
-            setDataListTimeSet(null);
-        }else{
-            await AsyncStorage.setItem('Notification', JSON.stringify(updatedDataList))
-        }
-        
-    };
-    useEffect(() => {
-        // AsyncStorage.removeItem("Notification")
->>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
         AsyncStorage.getItem("Notification")
             .then(data => {
                 if (data === null) {
@@ -113,14 +97,9 @@ export default function PageSetTime() {
                     is24Hour={true}
                     display="clock" onChange={AddTime} />}
                 {DataListTimeSet &&
-<<<<<<< HEAD
                     <View style={{ alignItems: "flex-end" }}>
                         <Bb onPress={() => setONedit(!ONedit)} icon={ONedit ? "close" : "clock-edit"} buttonColor={ONedit ? "#ff006e" : "#001d3d"} 
                         textColor={ONedit ? "black" : '#0077b6'} mode="elevated" style={{ borderRadius: 10, width: "30%", minHeight: 45 }}>{ONedit ? "Close Edit" : "Edit"}</Bb>
-=======
-                    <View style={{alignItems:"flex-end"}}>
-                        <Bb onPress={()=>setONedit(!ONedit)} icon={ONedit ? "close":"clock-edit"} buttonColor={ONedit ? "#ff006e":"#001d3d"} textColor={ONedit ? "black":'#0077b6'} mode="elevated" style={{borderRadius:10,width:"30%",minHeight:45}}>{ONedit ? "Close Edit":"Edit"}</Bb>
->>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
                     </View>
                 }
             </View>
@@ -141,11 +120,7 @@ export default function PageSetTime() {
 const styles = StyleSheet.create(
     {
         container: {
-<<<<<<< HEAD
             paddingTop: 50,
-=======
-            paddingTop: 5,
->>>>>>> 23de03838757cff3f1f984e0930addd2fe8be757
             backgroundColor: "#000814",
             flex: 1
         },
